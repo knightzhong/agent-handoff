@@ -26,7 +26,7 @@ class ContextBundle:
     log: str = ""
 
     @classmethod
-    def now(cls, *, bundle_id: str, repo_root: str, task: str, **kwargs: Any) -> "ContextBundle":
+    def now(cls, *, bundle_id: str, repo_root: str, task: str, **kwargs: Any) -> ContextBundle:
         return cls(
             id=bundle_id,
             created_at=datetime.now(timezone.utc).isoformat(),
@@ -39,7 +39,7 @@ class ContextBundle:
         return asdict(self)
 
     @classmethod
-    def from_dict(cls, data: dict[str, Any]) -> "ContextBundle":
+    def from_dict(cls, data: dict[str, Any]) -> ContextBundle:
         data = dict(data)
         data["instructions"] = [FileSnapshot(**x) for x in data.get("instructions", [])]
         data["files"] = [FileSnapshot(**x) for x in data.get("files", [])]

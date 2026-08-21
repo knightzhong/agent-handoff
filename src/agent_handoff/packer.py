@@ -116,10 +116,12 @@ def render_bundle(bundle: ContextBundle) -> str:
     out += [
         "",
         "## Handoff request",
-        "Continue this coding task from the supplied state. Be concrete about the next changes. "
-        "Do not claim you ran commands or edited files unless your transport actually "
-        "provides those tools. "
-        "Prefer a small patch plan, likely root cause, and validation steps.",
+        (
+            "Continue this coding task from the supplied state. Be concrete about the next changes. "
+            "Do not claim you ran commands or edited files unless your transport actually "
+            "provides those tools. Prefer a small patch plan, likely root cause, and validation "
+            "steps."
+        ),
         "",
     ]
     return "\n".join(out)
