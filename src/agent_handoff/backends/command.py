@@ -22,8 +22,7 @@ class CommandBackend:
             shlex.split(self.command),
             input=prompt,
             text=True,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
+            capture_output=True,
             env=env,
             check=False,
         )
@@ -41,15 +40,10 @@ class BrowserBridgeBackend:
 
     def ask(self, prompt: str, *, model: str | None = None) -> BackendResponse:
         cmd = [self.bridge_command, "ask", "--provider", self.provider, "--json", prompt]
-        if model:
-            # Model selection is session-oriented in common browser bridges.
-            # Keep the requested model as metadata unless the bridge maps it itself.
-            pass
         proc = subprocess.run(
             cmd,
             text=True,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
+            capture_output=True,
             check=False,
         )
         if proc.returncode != 0:
