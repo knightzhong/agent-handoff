@@ -13,8 +13,7 @@ def run_git(root: Path, *args: str) -> str:
         ["git", *args],
         cwd=root,
         text=True,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
+        capture_output=True,
         check=False,
     )
     if proc.returncode != 0:
@@ -28,8 +27,7 @@ def find_repo_root(start: Path | None = None) -> Path:
         ["git", "rev-parse", "--show-toplevel"],
         cwd=start,
         text=True,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
+        capture_output=True,
         check=False,
     )
     if proc.returncode == 0 and proc.stdout.strip():
