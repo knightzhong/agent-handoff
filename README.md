@@ -45,6 +45,53 @@ workspace
                    handoff resume
 ```
 
+## One-click manual takeover
+
+When your current coding agent cannot continue, switch **explicitly** instead of silently changing
+models. From the repository root:
+
+```bash
+handoff takeover
+```
+
+The default takeover is `Codex -> browser-bridge/chatgpt`. It packages the current repository,
+best-effort imports the newest local Codex rollout from `CODEX_HOME/sessions` (normally
+`~/.codex/sessions`), prints a persistent takeover banner, and opens a small discussion REPL. Every
+reply is labeled with the active fallback backend. Nothing switches automatically. The default browser
+mode expects an installed `bridge` command such as `ai-browser-bridge`; if you do not use a browser
+bridge, select `ollama`, `openai-compatible`, or `command` explicitly.
+
+```text
+=== MANUAL TAKEOVER ACTIVE ===
+source: codex
+active backend: browser-bridge/chatgpt
+No silent switching: assistant replies in this session come from the active backend.
+```
+
+Useful forms:
+
+```bash
+# Continue talking with the fallback backend
+handoff takeover
+
+# Send one message without entering the REPL
+handoff takeover --message "Given our discussion so far, what should I do next?"
+
+# Resume the saved fallback discussion later
+handoff takeover --resume
+
+# Pick an explicit Codex rollout if auto-discovery chooses the wrong one
+handoff takeover --codex-session ~/.codex/sessions/2026/08/21/rollout-....jsonl
+
+# Use an API/local backend instead
+handoff takeover --backend ollama --model qwen3-coder:latest
+```
+
+Inside the REPL, `/status` shows the active backend, `/resume` prints a hand-back prompt for the
+original coding agent, and `/quit` saves the takeover session. Session transcripts live under
+`.handoff/sessions/`. Plain `.jsonl` Codex rollouts are supported; compressed `.zst` archives are
+ignored unless you provide another transcript path yourself.
+
 ## Quick start
 
 ```bash
