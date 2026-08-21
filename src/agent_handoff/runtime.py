@@ -4,6 +4,7 @@ import json
 from pathlib import Path
 
 from .backends import BrowserBridgeBackend, CommandBackend, OllamaBackend, OpenAICompatibleBackend
+from .backends.base import BackendResponse
 from .packer import render_bundle
 from .repo import find_repo_root, run_git
 from .store import bundle_dir, handoff_home, load_bundle
@@ -43,7 +44,11 @@ def ask_bundle(
     prompt = render_bundle(bundle)
     client = build_backend(backend, base_url=base_url, command=command, provider=provider)
     response = client.ask(prompt, model=model)
-    target = bundle_dir(home, bundle.id)
+    return save_response(home, bundle.id, response)
+
+
+def save_response(home: Path, bundle_id: str, response: BackendResponse) -> Path:
+    target = bundle_dir(home, bundle_id)
     (target / "response.md").write_text(response.text + "\n", encoding="utf-8")
     (target / "response.json").write_text(
         json.dumps(
