@@ -15,7 +15,7 @@ def _post_json(url: str, payload: dict, headers: dict[str, str] | None = None) -
     for key, value in (headers or {}).items():
         request.add_header(key, value)
     try:
-        with urlopen(request, timeout=300) as response:  # noqa: S310 - caller controls endpoint
+        with urlopen(request, timeout=300) as response:
             return json.loads(response.read().decode("utf-8"))
     except HTTPError as exc:
         detail = exc.read().decode("utf-8", errors="replace")
